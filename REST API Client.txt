@@ -1,0 +1,42 @@
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
+public class SimpleRestClient {
+
+    // Method to fetch data from API
+    public static void fetchData(String apiUrl) {
+        try {
+            // Creating URL object
+            URL url = new URL(apiUrl);
+
+            // Opening connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            // Getting response code
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == 200) { // 200 OK
+                // Reading response
+                Scanner scanner = new Scanner(url.openStream());
+                while (scanner.hasNextLine()) {
+                    System.out.println(scanner.nextLine());
+                }
+                scanner.close();
+            } else {
+                System.out.println("Failed to fetch data. HTTP Response Code: " + responseCode);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error occurred: " + e.getMessage());
+        }
+    }
+
+    // Main method
+    public static void main(String[] args) {
+        String apiEndpoint = "https://api.publicapis.org/entries"; // Replace with your API if needed
+        fetchData(apiEndpoint);
+    }
+}
